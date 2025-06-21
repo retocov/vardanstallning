@@ -10,3 +10,17 @@
   </body>
 </html>
 
+<ul id="jobs"></ul>
+<script>
+fetch("vardanstallning.json")
+  .then(r=>r.json())
+  .then(data=>{
+    const ul = document.getElementById("jobs");
+    data.forEach(job=>{
+      const li = document.createElement("li");
+      li.innerHTML = `<a href="${job.url}" target="_blank">${job.title}</a>`;
+      ul.appendChild(li);
+    });
+  })
+  .catch(console.error);
+</script>
