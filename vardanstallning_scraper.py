@@ -74,13 +74,9 @@ INCLUDED_U_CATEGORY_NAMES = {
     "Vårdbiträden","Övriga läkare"
 }
 
-UPPSALA_API = "https://regionuppsala.se/api/VacancyApi/GetVacancies"
-HEADERS     = {"Content-Type": "application/json"}
-
 def fetch_uppsala_jobs(limit=100):
     all_jobs = []
     offset   = 0
-
     while True:
         payload = {
             "SelectedLocations":   [],
@@ -90,12 +86,11 @@ def fetch_uppsala_jobs(limit=100):
             "Offset":              offset,
             "Limit":               limit
         }
-
-        # POST only—no params
+        # ---- force a POST to the exact endpoint ----
         r = requests.post(UPPSALA_API, json=payload)
-        # debug: what did we actually send?
-        print("→ REQUEST:", r.request.method, r.request.url)
-        print("  BODY:", r.request.body[:100], "…")
+        # debug prints (optional—can remove after it works)
+        print("UPPSALA POST →", r.request.method, r.request.url)
+        print("BODY:", r.request.body[:100], "…")
         r.raise_for_status()
 
         batch = r.json().get("JobVacancies", [])
@@ -105,9 +100,9 @@ def fetch_uppsala_jobs(limit=100):
         for job in batch:
             if job.get("CategoryName") in INCLUDED_U_CATEGORY_NAMES:
                 all_jobs.append({
-                    "title":       job["Title"].strip(),
-                    "url":         job["Url"],
-                    "description": job["Description"].strip(),
+                    "title":       job.get("Title","").strip(),
+                    "url":         job.get("Url",""),
+                    "description": job.get("Description","").strip(),
                     "region":      "Uppsala",
                     "source":      "region-uppsala",
                 })
