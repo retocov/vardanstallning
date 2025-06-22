@@ -74,6 +74,16 @@ INCLUDED_U_CATEGORY_NAMES = {
     "Vårdbiträden","Övriga läkare"
 }
 
+# mimic the browser
+session = requests.Session()
+session.headers.update({
+    "Accept":             "application/json, text/plain, */*",
+    "Content-Type":       "application/json;charset=UTF-8",
+    "Origin":             "https://regionuppsala.se",
+    "Referer":            "https://regionuppsala.se/jobb-och-utbildning/lediga-tjanster/",
+    "User-Agent":         "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+})
+
 def fetch_uppsala_jobs(limit=100):
     all_jobs = []
     offset   = 0
@@ -88,28 +98,13 @@ def fetch_uppsala_jobs(limit=100):
             "Limit":               limit
         }
 
-        # 1) POST to the exact endpoint
-        r = requests.post(
-            UPPSALA_API,
-            headers={
-                "Content-Type": "application/json;charset=UTF-8",
-                "Accept":       "application/json, text/plain, */*"
-            },
-            json=payload
-        )
-        print("→ UPPSALA POST:", r.request.method, r.request.url)
-        print("→ STATUS:", r.status_code)
-        print("→ PREVIEW BODY:", r.text[:200].replace("\n"," "))
+        r = session.post(UPPSALA_API, json=payload)
+        print("UPPSALA ▶", r.status_code, r.headers.get("content-type"))
+        print("PREVIEW ▶", r.text[:200].replace("\n"," "))
         r.raise_for_status()
 
-        data = r.json()
-        # 2) figure out where the list is
-        if isinstance(data, dict) and "JobVacancies" in data:
-            batch = data["JobVacancies"]
-        elif isinstance(data, list):
-            batch = data
-        else:
-            raise ValueError("Unexpected Uppsala JSON structure: keys=" + ", ".join(data.keys()))
+        data = r.json()  # now it should be valid JSON
+        batch = data.get("JobVacancies", [])
 
         if not batch:
             break
@@ -123,11 +118,9 @@ def fetch_uppsala_jobs(limit=100):
                     "region":      "Uppsala",
                     "source":      "region-uppsala",
                 })
-
         offset += len(batch)
 
     return all_jobs
-
 
 
 # ─── Main: combine both regions ──────────────────────────────────────────────
