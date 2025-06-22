@@ -58,11 +58,7 @@ def get_job_details(url):
     }
 
 # ─── Region Uppsala config ─────────────────────────────────────────────────
-UPPSALA_API = (
-    "https://regionuppsala.se"
-    "/jobb-och-utbildning/lediga-tjanster"
-    "/api/VacancyApi/GetVacancies"
-)
+UPPSALA_API = "https://regionuppsala.se/api/VacancyApi/GetVacancies/"
 HEADERS     = {"Content-Type": "application/json"}
 
 INCLUDED_U_CATEGORY_NAMES = {
@@ -81,6 +77,7 @@ INCLUDED_U_CATEGORY_NAMES = {
 def fetch_uppsala_jobs(limit=100):
     all_jobs = []
     offset   = 0
+
     while True:
         payload = {
             "SelectedLocations":   [],
@@ -90,14 +87,30 @@ def fetch_uppsala_jobs(limit=100):
             "Offset":              offset,
             "Limit":               limit
         }
-        # ---- force a POST to the exact endpoint ----
-        r = requests.post(UPPSALA_API, json=payload)
-        # debug prints (optional—can remove after it works)
-        print("UPPSALA POST →", r.request.method, r.request.url)
-        print("BODY:", r.request.body[:100], "…")
+
+        # 1) POST to the exact endpoint
+        r = requests.post(
+            UPPSALA_API,
+            headers={
+                "Content-Type": "application/json;charset=UTF-8",
+                "Accept":       "application/json, text/plain, */*"
+            },
+            json=payload
+        )
+        print("→ UPPSALA POST:", r.request.method, r.request.url)
+        print("→ STATUS:", r.status_code)
+        print("→ PREVIEW BODY:", r.text[:200].replace("\n"," "))
         r.raise_for_status()
 
-        batch = r.json().get("JobVacancies", [])
+        data = r.json()
+        # 2) figure out where the list is
+        if isinstance(data, dict) and "JobVacancies" in data:
+            batch = data["JobVacancies"]
+        elif isinstance(data, list):
+            batch = data
+        else:
+            raise ValueError("Unexpected Uppsala JSON structure: keys=" + ", ".join(data.keys()))
+
         if not batch:
             break
 
@@ -114,6 +127,7 @@ def fetch_uppsala_jobs(limit=100):
         offset += len(batch)
 
     return all_jobs
+
 
 
 # ─── Main: combine both regions ──────────────────────────────────────────────
