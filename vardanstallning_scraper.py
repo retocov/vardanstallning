@@ -74,37 +74,38 @@ INCLUDED_U_CATEGORY_NAMES = {
     "Vårdbiträden","Övriga läkare"
 }
 
-# mimic the browser
-session = requests.Session()
-session.headers.update({
-    "Accept":             "application/json, text/plain, */*",
-    "Content-Type":       "application/json;charset=UTF-8",
-    "Origin":             "https://regionuppsala.se",
-    "Referer":            "https://regionuppsala.se/jobb-och-utbildning/lediga-tjanster/",
-    "User-Agent":         "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
-})
-
-def fetch_uppsala_jobs(limit=100):
+def fetch_uppsala_jobs(page_size=100):
     all_jobs = []
-    offset   = 0
+    page     = 1
 
     while True:
         payload = {
-            "SelectedLocations":   [],
-            "SelectedCategories":  [],
-            "SelectedEmployers":   [],
-            "SearchText":          "",
-            "Offset":              offset,
-            "Limit":               limit
+            "RegionId":               0,
+            "AdministrationId":       0,
+            "SelectedAdministrations": None,
+            "OccupationGroup":        "0",
+            "SummerJob":              False,
+            "SortBy":                 "enddate",
+            "Page":                   page,
+            "PageSize":               page_size,
+            "SearchQuery":            "",
+            "CurrentPageId":          18
         }
 
-        r = session.post(UPPSALA_API, json=payload)
-        print("UPPSALA ▶", r.status_code, r.headers.get("content-type"))
-        print("PREVIEW ▶", r.text[:200].replace("\n"," "))
+        r = requests.post(UPPSALA_API, json=payload)
+        print(f"Uppsala ▶ POST {r.status_code} / page {page}")
+        snippet = r.text[:200].replace("\n"," ")
+        print("  preview:", snippet, "…")
         r.raise_for_status()
 
-        data = r.json()  # now it should be valid JSON
-        batch = data.get("JobVacancies", [])
+        data = r.json()
+        print("  keys:", list(data.keys()))
+
+        # figure out the list field (inspect your 'keys' output):
+        batch = data.get("Vacancies")            \
+             or data.get("JobVacancies")         \
+             or data.get("Items")                \
+             or []
 
         if not batch:
             break
@@ -118,9 +119,11 @@ def fetch_uppsala_jobs(limit=100):
                     "region":      "Uppsala",
                     "source":      "region-uppsala",
                 })
-        offset += len(batch)
+
+        page += 1
 
     return all_jobs
+
 
 
 # ─── Main: combine both regions ──────────────────────────────────────────────
