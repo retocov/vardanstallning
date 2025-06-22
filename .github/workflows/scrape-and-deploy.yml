@@ -1,0 +1,35 @@
+name: Daily scrape & deploy
+
+# runs every day at 06:00 Stockholm time (UTC+2 → 04:00 UTC)
+on:
+  schedule:
+    - cron: '0 4 * * *'
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: true   # so we can push back
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4
+
+      - name: Run scraper
+        run: python vardanstallning_scraper.py
+
+      - name: Commit updated JSON
+        run: |
+          git config --local user.name  "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add vardanstallning.json
+          git diff --quiet && echo "No changes, skipping commit" && exit 0
+          git commit -m "chore: update jobs [skip ci]"
+          git push
