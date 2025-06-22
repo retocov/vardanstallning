@@ -58,7 +58,7 @@ def get_job_details(url):
     }
 
 # ─── Region Uppsala config ─────────────────────────────────────────────────
-UPPSALA_API = "https://regionuppsala.se/api/job-vacancy/GetVacancies/"
+UPPSALA_API = "https://regionuppsala.se/api/VacancyApi/GetVacancies/"
 HEADERS     = {"Content-Type": "application/json"}
 
 INCLUDED_U_CATEGORY_NAMES = {
@@ -78,19 +78,22 @@ def fetch_uppsala_jobs(limit=100):
     all_jobs = []
     offset = 0
     while True:
-        body = {
-            "SelectedLocations": [],
-            "SelectedCategories": [],
-            "SelectedEmployers": [],
-            "SearchText": "",
-            "Offset": offset,
-            "Limit": limit
+        params = {
+            "SelectedLocations": "",
+            "SelectedCategories": "",
+            "SelectedEmployers":   "",
+            "SearchText":          "",
+            "Offset":              offset,
+            "Limit":               limit
         }
-        r = requests.post(UPPSALA_API, headers=HEADERS, json=body)
+        # use GET with params instead of POST+json body
+        r = requests.get(UPPSALA_API, params=params)
         r.raise_for_status()
+
         batch = r.json().get("JobVacancies", [])
         if not batch:
             break
+
         for job in batch:
             if job.get("CategoryName") in INCLUDED_U_CATEGORY_NAMES:
                 all_jobs.append({
@@ -100,7 +103,9 @@ def fetch_uppsala_jobs(limit=100):
                     "region":      "Uppsala",
                     "source":      "region-uppsala",
                 })
+
         offset += len(batch)
+
     return all_jobs
 
 # ─── Main: combine both regions ──────────────────────────────────────────────
