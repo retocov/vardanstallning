@@ -74,20 +74,24 @@ INCLUDED_U_CATEGORY_NAMES = {
     "Vårdbiträden","Övriga läkare"
 }
 
+UPPSALA_API = "https://regionuppsala.se/api/VacancyApi/GetVacancies/"
+HEADERS     = {"Content-Type": "application/json"}
+
 def fetch_uppsala_jobs(limit=100):
     all_jobs = []
-    offset = 0
+    offset   = 0
+
     while True:
-        params = {
-            "SelectedLocations": "",
-            "SelectedCategories": "",
-            "SelectedEmployers":   "",
+        payload = {
+            "SelectedLocations":   [],
+            "SelectedCategories":  [],
+            "SelectedEmployers":   [],
             "SearchText":          "",
             "Offset":              offset,
             "Limit":               limit
         }
-        # use GET with params instead of POST+json body
-        r = requests.get(UPPSALA_API, params=params)
+        # POST to the real endpoint
+        r = requests.post(UPPSALA_API, headers=HEADERS, json=payload)
         r.raise_for_status()
 
         batch = r.json().get("JobVacancies", [])
@@ -107,6 +111,7 @@ def fetch_uppsala_jobs(limit=100):
         offset += len(batch)
 
     return all_jobs
+
 
 # ─── Main: combine both regions ──────────────────────────────────────────────
 def main():
