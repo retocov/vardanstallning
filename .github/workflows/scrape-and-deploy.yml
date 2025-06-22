@@ -1,9 +1,10 @@
 name: Daily scrape & deploy
 
-# runs every day at 06:00 Stockholm time (UTC+2 → 04:00 UTC)
 on:
+  workflow_dispatch:    # ← allows you to click “Run workflow” in GitHub
   schedule:
     - cron: '0 4 * * *'
+
 
 jobs:
   scrape:
