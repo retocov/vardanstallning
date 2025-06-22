@@ -58,7 +58,11 @@ def get_job_details(url):
     }
 
 # ─── Region Uppsala config ─────────────────────────────────────────────────
-UPPSALA_API = "https://regionuppsala.se/api/VacancyApi/GetVacancies"
+UPPSALA_API = (
+    "https://regionuppsala.se"
+    "/jobb-och-utbildning/lediga-tjanster"
+    "/api/VacancyApi/GetVacancies"
+)
 HEADERS     = {"Content-Type": "application/json"}
 
 INCLUDED_U_CATEGORY_NAMES = {
