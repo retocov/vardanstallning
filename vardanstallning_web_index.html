@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vårdanställning – Lediga jobb inom vård och omsorg</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Vårdanställning</h1>
+      <p>Hitta lediga jobb inom vård och omsorg i Sverige</p>
+    </header>
+    <main>
+      <section class="controls">
+        <input
+          type="text"
+          id="search"
+          placeholder="Sök på titel, arbetsgivare, ort eller beskrivning..."
+          aria-label="Sök"
+        />
+        <div class="filters">
+          <label>
+            Kategori
+            <select id="filter-category"></select>
+          </label>
+          <label>
+            Region
+            <select id="filter-region"></select>
+          </label>
+          <label>
+            Källa
+            <select id="filter-source"></select>
+          </label>
+          <label>
+            Sortering
+            <select id="sort">
+              <option value="published_desc">Senast publicerad</option>
+              <option value="published_asc">Äldst</option>
+              <option value="deadline_asc">Deadline närmast</option>
+            </select>
+          </label>
+        </div>
+      </section>
+      <section id="stats" class="stats"></section>
+      <div id="jobs" class="jobs-container"></div>
+      <nav id="pagination" class="pagination"></nav>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
