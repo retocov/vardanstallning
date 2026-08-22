@@ -1,115 +1,60 @@
-# vardanstallning
-Vårdanställning
+# Vårdanställning.se — V2
 
-Vårdanställning är en öppen plattform som samlar lediga jobb inom vård
-och omsorg i hela Sverige. Scraperna hämtar dagligen annonser från
-alla 21 regioners officiella jobbsidor, Arbetsförmedlingens
-platsbank (JobTech API) samt Läkartidningen. Data normaliseras,
-dedupliceras och publiceras som en statisk JSON‑fil som används av
-webbapplikationen.
+Vårdanställning är en snabb, svensk söktjänst för aktuella jobb inom **hälso- och sjukvård, äldreomsorg, hemtjänst, LSS och kommunal omsorg** i hela Sverige.
 
-Funktioner
+Målet är enkelt: man ska inte behöva veta på vilken arbetsgivares eller jobbsajts sida en kortlivad ST-, vikarie-, underläkar-, sjuksköterske- eller omsorgstjänst råkar publiceras.
 
-Fullständig täckning: inkluderar sjuksköterskor, läkare,
-undersköterskor, barnmorskor, psykologer, fysioterapeuter,
-arbetsterapeuter, biomedicinska analytiker och andra relevanta
-yrkesgrupper.
+## Datakällor
 
-Daglig uppdatering: GitHub Actions kör scraping‑pipen varje
-natt (kl. 04:00 CET) och uppdaterar datafilerna om något har
-förändrats.
+V2 hämtar jobb server-side från Arbetsförmedlingens öppna JobTech-tjänster:
 
-Modern webbapp: sök, filtrera och sortera bland tusentals
-annonser. Responsiv design som fungerar på både dator och mobil.
+- **JobSearch** — aktuella annonser i Platsbanken. Detta ger snabb tillgång till nya Platsbanken-annonser.
+- **JobAd Links** — metadata och länkar till annonser från Arbetsförmedlingen och externa jobbsajter. Datamängden uppdateras dagligen och innehåller enligt JobTech cirka 30 % fler annonser än Platsbanken.
 
-Enkelt att utöka: varje datakälla ligger i sin egen modul i
-scrapers/ och returnerar en lista med råa jobbposter. Nya
-källor kan läggas till genom att skapa ytterligare en modul och
-ansluta den i pipeline/run_all.py.
+Alla resultat länkar vidare till originalannonsen. Vi återpublicerar inte hela annonsinnehållet.
 
-Projektstruktur
-├── scrapers/             # en modul per datakälla
-│   ├── base.py          # gemensamma fetch‑funktioner
-│   ├── region_*.py      # region‑specifika scrapers (många är placeholders)
-│   ├── arbetsformedlingen.py
-│   └── lakartidningen.py
-├── pipeline/
-│   ├── __init__.py
-│   ├── util.py          # hjälpfunktioner (skriv JSON, tidsstämplar, id‑hash)
-│   ├── normalize.py     # normalisering, kategorimappning, statistik
-│   ├── dedupe.py        # deduplicering av annonser
-│   └── run_all.py       # samlar ihop allt
-├── data/
-│   ├── jobs.json        # genererad databas över annonser
-│   └── stats.json       # sammanfattande statistik
-├── web/
-│   ├── index.html       # webbgränssnitt
-│   ├── app.js           # klientlogik för sök/filter/sortering
-│   └── styles.css       # stilark
-├── .github/workflows/
-│   └── scrape.yml       # GitHub‑action som kör scrapen dagligen
-├── requirements.txt
-└── README.md
+## Täckning
 
-Köra lokalt
+Grundsökningen kombinerar JobTech-fältet **Hälso- och sjukvård** (`NYW6_mP6_vwf`) med kompletterande sökningar för bland annat:
 
-Klona repo:
+- äldreomsorg
+- hemtjänst
+- äldreboende / vårdboende / särskilt boende
+- hemsjukvård
+- LSS och funktionsstöd
+- boendestöd, gruppboende och personlig assistans
 
-git clone https://github.com/retocov/vardanstallning.git
-cd vardanstallning
+Därtill finns snabba kategorier för läkare, ST/BT/AT/underläkare, sjuksköterskor, undersköterskor, tandvård, rehab samt psykolog/kurator.
 
+Resultat från flera källor normaliseras och dedupliceras innan de visas.
 
-Installera beroenden och kör pipen:
+## Automatisk uppdatering
 
-python3 -m pip install --upgrade pip
-python3 -m pip install -r requirements.txt
-python3 -m pipeline.run_all
+Det behövs ingen nattlig scraper för webbplatsens huvudflöde. Varje sökning går via Vercel Functions till JobTech och cachas kort på CDN-nivå (`s-maxage=300`, `stale-while-revalidate=1800`). Därmed följer webbplatsen JobSearch löpande och JobAd Links dagliga uppdateringar automatiskt.
 
+## Bevakningar
 
-Starta en enkel HTTP‑server i projektroten för att testa webbappen:
+- **Spara/bevaka en sökning** lagras lokalt i webbläsaren — inget konto krävs.
+- Varje sökning har en **Atom/RSS-feed** (`/api/feed`) som kan följas i valfri RSS-läsare.
+- E-postnotiser är ett naturligt nästa steg, men kräver persistent lagring och en e-postleverantör och är därför medvetet inte fejkimplementerade i denna första skarpa version.
 
-python3 -m http.server 8000
+## Teknik
 
+Statisk frontend + Vercel Functions. Inga npm-beroenden krävs.
 
-Besök sedan http://localhost:8000/web/ i din webbläsare.
+```bash
+npm run check
+npx vercel dev
+```
 
-Lägga till en ny källa
+## API
 
-Skapa en ny modul i scrapers/, till exempel region_example.py.
-Modulen ska exponera en funktion get_region_example_jobs() som
-returnerar en lista med jobbposter enligt rått schema:
+`GET /api/jobs?q=&location=&category=&offset=0&limit=40`
 
-def get_region_example_jobs():
-    return [
-        {
-            "title": "Sjuksköterska till …",
-            "description": "…",
-            "employer": "Region Example",
-            "location": "Stad",
-            "municipality": "Exempelkommun",
-            "region": "Example",
-            "category": None,
-            "employment_type": "Tillsvidare",
-            "application_deadline": "2025-12-31",
-            "published_at": "2025-08-15",
-            "url": "https://…",
-            "source": "region_example",
-            "source_meta": {"origin": "region", "raw_category": "Sjuksköterskor"},
-            "fetched_at": "2025-08-16T12:00:00Z",
-        }
-    ]
+Kategorier: `all`, `doctor`, `doctor-training`, `nurse`, `assistant`, `elderly`, `lss`, `dental`, `rehab`, `mental`.
 
+`GET /api/feed?...` ger samma sökning som Atom-feed.
 
-Lägg till funktionen i listan _collect_scrapers() i
-pipeline/run_all.py så att den körs automatiskt.
+## Integritet
 
-Om källan använder nya kategorier behöver du uppdatera
-RAW_CATEGORY_MAP i pipeline/normalize.py så att de mappar till
-en av de befintliga kanoniska kategorierna.
-
-Kör python3 -m pipeline.run_all lokalt för att verifiera att
-jobben importeras korrekt.
-
-Licens
-
-Public domain (CC0). Använd och modifiera fritt.
+Vårdanställning lagrar inga konton i V2. Sparade bevakningar ligger endast i användarens `localStorage`. Jobblänkar går till respektive originalkälla.
