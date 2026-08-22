@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://vardanstallning.vercel.app/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://vardanstallning.vercel.app/jobb/lakare</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://vardanstallning.vercel.app/jobb/st-lakare</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://vardanstallning.vercel.app/jobb/bt-lakare</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vardanstallning.vercel.app/jobb/at-lakare</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vardanstallning.vercel.app/jobb/underlakare</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://vardanstallning.vercel.app/jobb/sjukskoterska</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://vardanstallning.vercel.app/jobb/underskoterska</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://vardanstallning.vercel.app/jobb/barnmorska</loc><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://vardanstallning.vercel.app/jobb/aldreomsorg-hemtjanst</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://vardanstallning.vercel.app/jobb/lss-omsorg</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://vardanstallning.vercel.app/jobb/tandvard</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vardanstallning.vercel.app/jobb/rehab</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+  <url><loc>https://vardanstallning.vercel.app/jobb/psykolog-kurator</loc><changefreq>daily</changefreq><priority>0.7</priority></url>
+</urlset>
