@@ -3,121 +3,130 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="Vårdanställning samlar lediga jobb inom vård, omsorg, hemtjänst och äldreomsorg i hela Sverige." />
+  <meta name="description" content="Sök och bevaka aktuella jobb inom vård, omsorg, hemtjänst och äldreomsorg i hela Sverige. Vårdanställning söker i flera jobbkällor samtidigt." />
   <meta name="theme-color" content="#0f6b5b" />
-  <title>Vårdanställning — alla jobb inom vård & omsorg</title>
+  <link rel="canonical" href="https://vardanstallning.vercel.app/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="sv_SE" />
+  <meta property="og:title" content="Vårdanställning — alla vårdjobb i Sverige" />
+  <meta property="og:description" content="Sök flera svenska jobbkällor samtidigt. Exakta filter för ST, BT, AT, underläkare, sjuksköterska, äldreomsorg, hemtjänst och LSS." />
+  <meta property="og:url" content="https://vardanstallning.vercel.app/" />
+  <meta property="og:image" content="https://vardanstallning.vercel.app/og.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <title>Vårdanställning — alla vårdjobb i Sverige</title>
   <link rel="preconnect" href="https://links.api.jobtechdev.se" />
   <link rel="stylesheet" href="/styles.css" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Vårdanställning","url":"https://vardanstallning.vercel.app/","potentialAction":{"@type":"SearchAction","target":"https://vardanstallning.vercel.app/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="/" aria-label="Vårdanställning startsida">
-      <span class="brand-mark" aria-hidden="true">V</span>
-      <span>Vårdanställning</span>
-    </a>
+    <a class="brand" href="/" aria-label="Vårdanställning startsida"><span class="brand-mark" aria-hidden="true">V</span><span>Vårdanställning</span></a>
     <nav class="topnav" aria-label="Huvudmeny">
       <button id="savedToggle" class="nav-button" type="button">Bevakningar <span id="savedCount" class="count-badge">0</span></button>
-      <a href="#about">Om tjänsten</a>
+      <a href="#difference">Så funkar det</a>
     </nav>
   </header>
 
   <main>
     <section class="hero">
       <div class="hero-inner">
-        <span class="eyebrow">Hela Sveriges vård & omsorg på ett ställe</span>
-        <h1>Missa inte jobbet som<br><span>bara dyker upp.</span></h1>
-        <p class="hero-copy">Sök bland aktuella jobb inom hälso- och sjukvård, äldreomsorg, hemtjänst, LSS och kommunal omsorg — och bevaka exakt det du väntar på.</p>
+        <span class="eyebrow">Sök flera jobbkällor samtidigt</span>
+        <h1>Alla vårdjobb.<br><span>Hela Sverige. Ett ställe.</span></h1>
+        <p class="hero-copy">Hitta aktuella jobb inom hälso- och sjukvård, äldreomsorg, hemtjänst, LSS och kommunal omsorg. Filtrera exakt — och se vad som är nytt sedan sist.</p>
 
         <form id="searchForm" class="search-panel">
-          <label class="search-field main-search">
-            <span>Vad söker du?</span>
-            <input id="query" name="q" type="search" autocomplete="off" placeholder="t.ex. ST ortopedi, underläkare, natt sjuksköterska…" />
-          </label>
-          <label class="search-field">
-            <span>Var?</span>
-            <input id="location" name="location" type="search" autocomplete="off" placeholder="Hela Sverige" />
-          </label>
+          <label class="search-field main-search"><span>Vad söker du?</span><input id="query" name="q" type="search" autocomplete="off" placeholder="t.ex. ST ortopedi, underläkare, IVA-sjuksköterska…" /></label>
+          <label class="search-field"><span>Var?</span><input id="location" name="location" type="search" autocomplete="off" placeholder="Hela Sverige" /></label>
           <button class="primary-button" type="submit">Sök jobb</button>
         </form>
 
         <div class="quick-row" aria-label="Snabbsökningar">
           <span>Snabbsök:</span>
-          <button class="quick-chip" data-category="doctor-training">ST / BT / AT / underläkare</button>
-          <button class="quick-chip" data-query="sjuksköterska">Sjuksköterska</button>
+          <button class="quick-chip" data-category="st">ST-läkare</button>
+          <button class="quick-chip" data-category="bt">BT-läkare</button>
+          <button class="quick-chip" data-category="at">AT-läkare</button>
+          <button class="quick-chip" data-category="underdoctor">Underläkare / vik</button>
+          <button class="quick-chip" data-category="nurse">Sjuksköterska</button>
           <button class="quick-chip" data-category="elderly">Äldreomsorg & hemtjänst</button>
           <button class="quick-chip" data-category="lss">LSS & funktionsstöd</button>
         </div>
       </div>
     </section>
 
+    <section class="proof-strip" aria-label="Tjänstens fördelar">
+      <div><strong>2</strong><span>JobTech-källsystem</span></div>
+      <div><strong>Exakt</strong><span>ST / BT / AT-klassning</span></div>
+      <div><strong>Direkt</strong><span>Till originalannonsen</span></div>
+      <div><strong>Gratis</strong><span>Ingen inloggning krävs</span></div>
+    </section>
+
     <section class="content-shell">
       <div class="content-head">
-        <div>
-          <p class="section-kicker">Aktuella annonser</p>
-          <h2 id="resultTitle">Vård & omsorg i hela Sverige</h2>
-          <p id="resultMeta" class="result-meta" aria-live="polite">Hämtar aktuella jobb…</p>
-        </div>
+        <div><p class="section-kicker">Aktuella annonser</p><h2 id="resultTitle">Vård & omsorg i hela Sverige</h2><p id="resultMeta" class="result-meta" aria-live="polite">Hämtar aktuella jobb…</p></div>
         <div class="actions">
-          <button id="watchButton" class="secondary-button" type="button">☆ Bevaka sökningen</button>
+          <button id="watchButton" class="secondary-button" type="button">☆ Bevaka</button>
+          <button id="shareButton" class="secondary-button" type="button">Dela</button>
           <a id="rssLink" class="secondary-button subtle" href="/api/feed" target="_blank" rel="noopener">RSS</a>
         </div>
       </div>
 
+      <div id="newSince" class="new-since" hidden></div>
+
       <div class="filters" id="filters">
         <button class="filter-chip active" data-category="all">Alla</button>
         <button class="filter-chip" data-category="doctor">Läkare</button>
-        <button class="filter-chip" data-category="doctor-training">ST / BT / AT / vik</button>
+        <button class="filter-chip precision" data-category="st">ST</button>
+        <button class="filter-chip precision" data-category="bt">BT</button>
+        <button class="filter-chip precision" data-category="at">AT</button>
+        <button class="filter-chip precision" data-category="underdoctor">Underläkare</button>
         <button class="filter-chip" data-category="nurse">Sjuksköterska</button>
         <button class="filter-chip" data-category="assistant">Undersköterska</button>
+        <button class="filter-chip" data-category="midwife">Barnmorska</button>
         <button class="filter-chip" data-category="elderly">Äldreomsorg & hemtjänst</button>
         <button class="filter-chip" data-category="lss">LSS & omsorg</button>
         <button class="filter-chip" data-category="dental">Tandvård</button>
         <button class="filter-chip" data-category="rehab">Rehab</button>
         <button class="filter-chip" data-category="mental">Psykolog / kurator</button>
+        <button class="filter-chip" data-category="biomed">BMA</button>
+        <button class="filter-chip" data-category="admin">Vårdadministration</button>
+      </div>
+
+      <div class="results-toolbar">
+        <button id="freshToggle" class="toolbar-button" type="button">Nya senaste 3 dygnen</button>
+        <label>Sortera <select id="sortSelect"><option value="newest">Nyast först</option><option value="deadline">Sista ansökningsdag</option></select></label>
       </div>
 
       <div class="layout">
-        <section class="jobs-column" aria-label="Jobbresultat">
-          <div id="jobList" class="job-list"></div>
-          <button id="loadMore" class="load-more" type="button" hidden>Visa fler jobb</button>
-        </section>
-
+        <section class="jobs-column" aria-label="Jobbresultat"><div id="jobList" class="job-list"></div><button id="loadMore" class="load-more" type="button" hidden>Visa fler jobb</button></section>
         <aside class="side-card" id="savedPanel">
-          <div class="side-card-head">
-            <div>
-              <span class="section-kicker">Dina bevakningar</span>
-              <h3>Sparade sökningar</h3>
-            </div>
-            <button id="closeSaved" class="icon-button" aria-label="Stäng">×</button>
-          </div>
+          <div class="side-card-head"><div><span class="section-kicker">Dina bevakningar</span><h3>Sparade sökningar</h3></div><button id="closeSaved" class="icon-button" aria-label="Stäng">×</button></div>
           <div id="savedSearches" class="saved-list"></div>
-          <p class="side-note">Bevakningar sparas på den här enheten. När du återkommer markerar vi jobb som publicerats sedan ditt senaste besök.</p>
+          <p class="side-note">Bevakningar sparas på den här enheten. När du återkommer visar vi hur många nya annonser som publicerats sedan ditt senaste besök. Varje sökning har också en RSS-feed.</p>
         </aside>
       </div>
     </section>
 
-    <section id="about" class="about-section">
-      <div>
-        <span class="section-kicker">Varför Vårdanställning?</span>
-        <h2>Byggd för att hitta öppningarna — inte för att hålla dig kvar.</h2>
+    <section id="difference" class="about-section">
+      <div><span class="section-kicker">Byggd som jobbradar, inte annonsplats</span><h2>Det viktiga är att hitta rätt öppning — oavsett var den publicerades.</h2></div>
+      <div class="about-grid four">
+        <article><strong>01</strong><h3>Flera källor, en sökning</h3><p>Vi kombinerar JobSearch och JobAd Links och kompletterar vårddata med riktade sökningar efter kommunal omsorg, hemtjänst, LSS och äldreomsorg.</p></article>
+        <article><strong>02</strong><h3>Precision före brus</h3><p>ST, BT, AT och underläkare klassas från själva jobbtiteln/yrkesrollen — inte bara för att orden råkar nämnas någonstans i annonsen.</p></article>
+        <article><strong>03</strong><h3>Dubbletter slås ihop</h3><p>Samma tjänst kan finnas i Platsbanken och på en extern jobbsajt. Vi försöker visa den en gång och länkar vidare till källan.</p></article>
+        <article><strong>04</strong><h3>Kom tillbaka och se vad som är nytt</h3><p>Spara en sökning utan konto och se nya träffar sedan förra besöket. Dela sökningen med en kollega eller följ den som RSS.</p></article>
       </div>
-      <div class="about-grid">
-        <article><strong>1</strong><h3>Brett underlag</h3><p>Vi kombinerar JobSearch och JobAd Links från Arbetsförmedlingen/JobTech för både färska Platsbanken-annonser och bredare jobbmarknadstäckning.</p></article>
-        <article><strong>2</strong><h3>Vård på riktigt</h3><p>Snabbfilter för sådant vårdpersonal faktiskt söker efter: ST, BT, AT, vikariat, hemtjänst, äldreomsorg och LSS.</p></article>
-        <article><strong>3</strong><h3>Direkt till källan</h3><p>Vi visar det du behöver för att hitta rätt och länkar sedan vidare till originalannonsen för ansökan.</p></article>
-      </div>
-      <p class="source-note">Annonsdata hämtas från JobTech/Arbetsförmedlingen. Källornas egna uppgifter och villkor gäller för respektive annons.</p>
+      <p class="source-note">Annonsdata hämtas från JobTech/Arbetsförmedlingen. Vårdanställning är en oberoende söktjänst och är inte en del av Arbetsförmedlingen. Källornas egna uppgifter och villkor gäller för respektive annons.</p>
     </section>
   </main>
 
   <footer>
     <a class="brand compact" href="/"><span class="brand-mark">V</span><span>Vårdanställning</span></a>
+    <div class="footer-links"><a href="/jobb/st-lakare">ST-läkare</a><a href="/jobb/underlakare">Underläkare</a><a href="/jobb/sjukskoterska">Sjuksköterska</a><a href="/jobb/aldreomsorg-hemtjanst">Äldreomsorg</a></div>
     <span>Jobb inom vård & omsorg i Sverige.</span>
   </footer>
 
-  <template id="skeletonTemplate">
-    <article class="job-card skeleton-card"><div class="skeleton line short"></div><div class="skeleton line title"></div><div class="skeleton line"></div><div class="skeleton line medium"></div></article>
-  </template>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <template id="skeletonTemplate"><article class="job-card skeleton-card"><div class="skeleton line short"></div><div class="skeleton line title"></div><div class="skeleton line"></div><div class="skeleton line medium"></div></article></template>
   <script src="/app.js" defer></script>
 </body>
 </html>
