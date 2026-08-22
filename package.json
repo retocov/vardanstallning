@@ -1,0 +1,8 @@
+{
+  "name": "vardanstallning",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Sök och bevaka jobb inom vård och omsorg i Sverige.",
+  "scripts": {"check": "node --check api/_jobs-core.js && node --check api/jobs.js && node --check api/feed.js && node --check app.js"},
+  "engines": {"node": ">=20"}
+}
