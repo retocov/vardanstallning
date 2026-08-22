@@ -2,25 +2,7 @@
   "version": 2,
   "cleanUrls": true,
   "rewrites": [
-    {"source": "/jobb/lakare", "destination": "/"},
-    {"source": "/jobb/st-lakare", "destination": "/"},
-    {"source": "/jobb/bt-lakare", "destination": "/"},
-    {"source": "/jobb/at-lakare", "destination": "/"},
-    {"source": "/jobb/underlakare", "destination": "/"},
-    {"source": "/jobb/sjukskoterska", "destination": "/"},
-    {"source": "/jobb/underskoterska", "destination": "/"},
-    {"source": "/jobb/barnmorska", "destination": "/"},
-    {"source": "/jobb/aldreomsorg-hemtjanst", "destination": "/"},
-    {"source": "/jobb/lss-omsorg", "destination": "/"},
-    {"source": "/jobb/tandvard", "destination": "/"},
-    {"source": "/jobb/rehab", "destination": "/"},
-    {"source": "/jobb/psykolog-kurator", "destination": "/"}
+    {"source":"/jobb/lakare","destination":"/"},{"source":"/jobb/st-lakare","destination":"/"},{"source":"/jobb/bt-lakare","destination":"/"},{"source":"/jobb/at-lakare","destination":"/"},{"source":"/jobb/underlakare","destination":"/"},{"source":"/jobb/sjukskoterska","destination":"/"},{"source":"/jobb/underskoterska","destination":"/"},{"source":"/jobb/barnmorska","destination":"/"},{"source":"/jobb/aldreomsorg-hemtjanst","destination":"/"},{"source":"/jobb/lss-omsorg","destination":"/"},{"source":"/jobb/socialt-arbete","destination":"/"},{"source":"/jobb/tandvard","destination":"/"},{"source":"/jobb/rehab","destination":"/"},{"source":"/jobb/apotek","destination":"/"},{"source":"/jobb/life-science","destination":"/"},{"source":"/jobb/djursjukvard","destination":"/"}
   ],
-  "headers": [
-    {"source": "/(.*)", "headers": [
-      {"key": "X-Content-Type-Options", "value": "nosniff"},
-      {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"},
-      {"key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()"}
-    ]}
-  ]
+  "headers":[{"source":"/(.*)","headers":[{"key":"X-Content-Type-Options","value":"nosniff"},{"key":"Referrer-Policy","value":"strict-origin-when-cross-origin"},{"key":"Permissions-Policy","value":"camera=(), microphone=(), geolocation=()"}]}]
 }
