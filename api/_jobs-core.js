@@ -99,14 +99,26 @@ function sourceLabel(ad) {
 }
 
 function doctorStage(title = '', occupation = '') {
-  const t = String(title).toLowerCase();
-  const o = String(occupation).toLowerCase();
+  const t = String(title).toLowerCase().trim();
+  const o = String(occupation).toLowerCase().trim();
   const doctorOccupation = /läkare/.test(o);
-  const explicit = (re) => re.test(o) || (doctorOccupation && re.test(t)) || re.test(t.slice(0, 20));
-  if (explicit(/(?:^|[^a-zåäö])st[\s-]?läkare\b/) || (doctorOccupation && /^specialisttjänstgör/.test(t))) return 'st';
-  if (explicit(/(?:^|[^a-zåäö])bt[\s-]?läkare\b/) || (doctorOccupation && /^bastjänstgör/.test(t))) return 'bt';
-  if (explicit(/(?:^|[^a-zåäö])at[\s-]?läkare\b/) || (doctorOccupation && /^allmäntjänstgör/.test(t))) return 'at';
-  if (/underläkare/.test(o) || (doctorOccupation && /underläkare/.test(t)) || /^.{0,25}underläkare/.test(t)) return 'underdoctor';
+
+  // JobTech/provider occupation labels can occasionally be broader or simply wrong.
+  // Stage classification is therefore title-first. The occupation is only used to
+  // validate short, conventional titles such as "AT i Mora" or "BT Region X".
+  if ((doctorOccupation && /(?:^|[^a-zåäö])st[\s-]?läkare\b/.test(t)) ||
+      (/^st(?:\b|[\s:-])/.test(t) && /(?:st-?)?läkare/.test(o)) ||
+      /^specialisttjänstgör/.test(t)) return 'st';
+
+  if ((doctorOccupation && /(?:^|[^a-zåäö])bt[\s-]?läkare\b/.test(t)) ||
+      (/^bt(?:\b|[\s:-])/.test(t) && /(?:bt-?)?läkare/.test(o)) ||
+      /^bastjänstgör/.test(t)) return 'bt';
+
+  if ((doctorOccupation && /(?:^|[^a-zåäö])at[\s-]?läkare\b/.test(t)) ||
+      (/^at(?:\b|[\s:-])/.test(t) && /(?:at-?)?läkare/.test(o)) ||
+      /^allmäntjänstgör/.test(t)) return 'at';
+
+  if (/underläkare/.test(t) || (/underläkare/.test(o) && /^(?:vikarierande |leg(?:itimerad)? )?underläk/.test(t))) return 'underdoctor';
   return null;
 }
 
